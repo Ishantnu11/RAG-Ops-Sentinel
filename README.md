@@ -10,27 +10,40 @@ SentinelRAG is a high-performance RAG (Retrieval-Augmented Generation) system bu
 ## 🚀 Key Features
 
 -   **Agentic Self-Correction**: LLM-based grader ensures document relevance before generation.
--   **Zero-Cost Web Fallback**: Uses **DuckDuckGo Search** and **Scrapling** to autonomously find and extract real-time internet context when local knowledge is insufficient.
--   **Instrumentation**: OpenInference (OTLP) exporting to Arize Phoenix.
--   **Custom Metrics**: TTFT, simulated cost, and context precision.
--   **CI/CD Gating**: Standalone evaluation script for build validation.
--   **Persistent Dashboard**: Dedicated background launcher ensures your observability data is always accessible.
+-   **Zero-Cost Web Fallback**: Uses **DuckDuckGo Search** and **Scrapling** to autonomously find and extract real-time internet context when local knowledge is insufficient. No API keys required!
+-   **Full Observability**: Integrated with Arize Phoenix for deep tracing of every retrieval and generation step.
+-   **Automated Evaluation**: Built-in CI/CD gating using **RAGAS** to ensure answer faithfulness and reliability.
+-   **Local-First Architecture**: 100% privacy-focused. Your data never leaves your environment.
 
 ## 🛠️ Tech Stack
 
 -   **Orchestration**: LangGraph
 -   **Vector Database**: ChromaDB
 -   **Embedding & LLM**: Ollama (Llama 3.2)
+-   **Web Extraction**: Scrapling (StealthyFetcher)
+-   **Search**: DuckDuckGo
 -   **Observability**: Arize Phoenix / OpenTelemetry
 -   **Evaluation**: RAGAS
--   **Tokenizer**: Tiktoken
+
+## 📂 Project Structure
+
+```text
+SentinelRAG/
+├── chroma_db/          # Persistent vector store
+├── eval_gate.py        # CI/CD evaluation script
+├── golden_dataset.json # Ground truth for evaluation
+├── launch_phoenix.py   # Background observability launcher
+├── observability.py    # OTLP tracing configuration
+├── rag_system.py       # Main LangGraph pipeline
+└── requirements.txt    # Project dependencies
+```
 
 ## 📥 Installation
 
 1.  **Clone the Repository**:
     ```bash
-    git clone e:/SentinelRAG
-    cd SentinelRAG
+    git clone https://github.com/Akshu24Tech/RAG-Ops-Sentinel.git
+    cd RAG-Ops-Sentinel
     ```
 
 2.  **Install Dependencies**:
@@ -47,7 +60,7 @@ SentinelRAG is a high-performance RAG (Retrieval-Augmented Generation) system bu
 ## 🚦 Usage
 
 ### 1. Launch the Observability Dashboard
-Run the dedicated launcher in a separate terminal:
+Run the dedicated launcher in a separate terminal to keep the dashboard alive:
 ```bash
 python launch_phoenix.py
 ```
@@ -68,12 +81,12 @@ python eval_gate.py
 
 ## 📊 Metrics Explained
 
--   **TTFT**: The delay between the request and the first generated token. Critical for UX.
--   **Cost**: Simulated dollars based on $2.50 per 1M input tokens and $10.00 per 1M output tokens.
--   **Faithfulness (RAGAS)**: Measures how well the answer is derived solely from the retrieved context.
+-   **TTFT (Time To First Token)**: Measures UI responsiveness.
+-   **Cost Analysis**: Simulated local cost estimates based on token usage.
+-   **Faithfulness (RAGAS)**: High-precision metric to ensure answers are grounded in context.
 
 ## 🔒 Privacy & Cost
-Everything runs locally. No data leaves your machine, and no API keys are required for the core functionality.
+Everything runs locally. No data leaves your machine, and **zero API keys** are needed.
 
 ---
 Built with ❤️ for High-Performance RAG Engineering.
