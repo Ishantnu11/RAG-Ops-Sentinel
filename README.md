@@ -88,5 +88,5 @@ python eval_gate.py
 ## 🔒 Privacy & Cost
 Everything runs locally. No data leaves your machine, and **zero API keys** are needed.
 
----
+
 Built with ❤️ for High-Performance RAG Engineering.
