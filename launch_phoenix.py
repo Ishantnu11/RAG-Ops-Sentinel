@@ -6,16 +6,16 @@ import os
 def launch():
     print("--- PHOENIX MINIMAL LAUNCHER ---")
     
-    # Set environment variables for Phoenix to picked up
-    os.environ["PHOENIX_PORT"] = "6006"
-    os.environ["PHOENIX_HOST"] = "0.0.0.0" # Listen on all interfaces
+    # Set environment variables for Phoenix to be picked up
+    os.environ["PHOENIX_PORT"] = os.getenv("PORT", "6006")
+    os.environ["PHOENIX_HOST"] = os.getenv("PHOENIX_HOST", "0.0.0.0") # Listen on all interfaces
     
-    # Use workspace dir for data
-    data_dir = os.path.abspath("phoenix_data")
+    # Use workspace dir for data, prioritizing environment variables
+    data_dir = os.getenv("PHOENIX_WORKING_DIR", os.path.abspath("phoenix_data"))
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
     os.environ["PHOENIX_WORKING_DIR"] = data_dir
-    os.environ["PHOENIX_DATA_DIR"] = data_dir
+    os.environ["PHOENIX_DATA_DIR"] = os.getenv("PHOENIX_DATA_DIR", data_dir)
 
     try:
         print(f"Launching Phoenix (port 6006, data_dir: {data_dir})...")

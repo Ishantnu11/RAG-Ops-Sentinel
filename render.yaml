@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: sentinel-rag
+    env: docker
+    plan: starter # Recommend at least starter for Ollama/RAM
+    region: ohio
+    dockerContext: .
+    dockerFilePath: Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 6006
+      - key: ENABLE_PHOENIX
+        value: "true"
+      - key: CHROMA_PERSIST_DIR
+        value: /app/data/chroma_db
+      - key: PHOENIX_WORKING_DIR
+        value: /app/data/phoenix_data
+    disk:
+      name: rag-data
+      mountPath: /app/data
+      sizeGB: 1

@@ -23,7 +23,7 @@ embeddings = OllamaEmbeddings(model="llama3.2")
 llm = ChatOllama(model="llama3.2", temperature=0)
 
 # Vector Store Setup
-PERSIST_DIR = "./chroma_db"
+PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")
 vector_store = Chroma(
     collection_name="rag_collection",
     embedding_function=embeddings,
