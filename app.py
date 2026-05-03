@@ -426,6 +426,17 @@ if "pipeline_logs" not in st.session_state:
 #  PIPELINE IMPORT (lazy, with error handling)
 # ══════════════════════════════════════════════════════════════════════════════
 
+# ─── Detection ────────────────────────────────────────────────────────────────
+def get_groq_key():
+    """Detect if we should use Cloud mode (Groq) or Local mode (Ollama)."""
+    try:
+        return st.secrets["GROQ_API_KEY"]
+    except:
+        return os.getenv("GROQ_API_KEY")
+
+GROQ_API_KEY = get_groq_key()
+IS_CLOUD = GROQ_API_KEY is not None
+
 @st.cache_resource(show_spinner=False)
 def load_pipeline():
     """Load the RAG pipeline once and cache it."""
@@ -439,16 +450,30 @@ def load_pipeline():
         from duckduckgo_search import DDGS
 
         CHROMA_DIR  = "./chroma_db"
-        EMBED_MODEL = "llama3.2"
-        CHAT_MODEL  = "llama3.2"
         RETRIEVAL_K = 3
 
-        embeddings  = OllamaEmbeddings(model=EMBED_MODEL)
+        if IS_CLOUD:
+            from langchain_groq import ChatGroq
+            from langchain_huggingface import HuggingFaceEmbeddings
+            
+            # Using a small, fast embedding model for cloud CPU
+            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            llm = ChatGroq(
+                temperature=0, 
+                model_name="llama-3.1-70b-versatile",
+                groq_api_key=GROQ_API_KEY
+            )
+            st.info("☁️ Cloud Mode: Using Groq (Llama 3.1) & HuggingFace Embeddings")
+        else:
+            from langchain_ollama import ChatOllama, OllamaEmbeddings
+            embeddings = OllamaEmbeddings(model="llama3.2")
+            llm = ChatOllama(model="llama3.2", temperature=0)
+            st.info("🏠 Local Mode: Using Ollama (Llama 3.2)")
+
         vectorstore = Chroma(
             persist_directory=CHROMA_DIR,
             embedding_function=embeddings,
         )
-        llm = ChatOllama(model=CHAT_MODEL, temperature=0)
 
         return {
             "vectorstore": vectorstore,
