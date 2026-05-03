@@ -435,7 +435,8 @@ def get_groq_key():
         return os.getenv("GROQ_API_KEY")
 
 GROQ_API_KEY = get_groq_key()
-IS_CLOUD = GROQ_API_KEY is not None
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL") or (st.secrets.get("OLLAMA_BASE_URL") if "OLLAMA_BASE_URL" in st.secrets else "http://localhost:11434")
+IS_CLOUD = GROQ_API_KEY is not None or OLLAMA_BASE_URL != "http://localhost:11434"
 
 @st.cache_resource(show_spinner=False)
 def load_pipeline():
@@ -452,7 +453,7 @@ def load_pipeline():
         CHROMA_DIR  = "./chroma_db"
         RETRIEVAL_K = 3
 
-        if IS_CLOUD:
+        if GROQ_API_KEY:
             from langchain_groq import ChatGroq
             from langchain_huggingface import HuggingFaceEmbeddings
             
@@ -463,12 +464,15 @@ def load_pipeline():
                 model_name="llama-3.1-70b-versatile",
                 groq_api_key=GROQ_API_KEY
             )
-            st.info("☁️ Cloud Mode: Using Groq (Llama 3.1) & HuggingFace Embeddings")
+            st.info(f"☁️ Cloud Mode: Using Groq (Llama 3.1)")
         else:
             from langchain_ollama import ChatOllama, OllamaEmbeddings
-            embeddings = OllamaEmbeddings(model="llama3.2")
-            llm = ChatOllama(model="llama3.2", temperature=0)
-            st.info("🏠 Local Mode: Using Ollama (Llama 3.2)")
+            embeddings = OllamaEmbeddings(model="llama3.2", base_url=OLLAMA_BASE_URL)
+            llm = ChatOllama(model="llama3.2", temperature=0, base_url=OLLAMA_BASE_URL)
+            if OLLAMA_BASE_URL != "http://localhost:11434":
+                st.info(f"🌐 Remote Mode: Connecting to Ollama at {OLLAMA_BASE_URL}")
+            else:
+                st.info("🏠 Local Mode: Using Ollama (Llama 3.2)")
 
         vectorstore = Chroma(
             persist_directory=CHROMA_DIR,
