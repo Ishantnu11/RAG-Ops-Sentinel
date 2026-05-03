@@ -1,7 +1,7 @@
-# Use Python 3.10 as base
+# Use Python 3.10
 FROM python:3.10-slim
 
-# Install system dependencies and curl
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
     build-essential \
@@ -11,21 +11,25 @@ RUN apt-get update && apt-get install -y \
 RUN curl -L https://ollama.com/download/ollama-linux-amd64 -o /usr/bin/ollama \
     && chmod +x /usr/bin/ollama
 
-# Set work directory
-WORKDIR /app
+# Set up user and directory
+RUN useradd -m -u 1000 user
+USER user
+ENV HOME=/home/user \
+    PATH=/home/user/.local/bin:$PATH
+WORKDIR $HOME/app
 
 # Copy requirements and install
-COPY requirements.txt .
+COPY --chown=user requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project files
-COPY . .
+COPY --chown=user . .
 
-# Expose Streamlit port
-EXPOSE 8501
+# Hugging Face Spaces uses port 7860
+EXPOSE 7860
 
-# Copy and set permissions for start script
-RUN chmod +x render_start.sh
+# Set permissions for entrypoint
+RUN chmod +x entrypoint.sh
 
 # Start the application
-CMD ["./render_start.sh"]
+CMD ["./entrypoint.sh"]
