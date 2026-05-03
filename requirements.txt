@@ -1,0 +1,40 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# SentinelRAG — requirements.txt
+# B.Tech Project | Gurugram University | Akshu Grewal · Ishantnu · Anish Singh Rawat
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Core RAG
+langchain>=0.2.0
+langchain-community>=0.2.0
+langchain-ollama>=0.1.0
+langgraph>=0.2.0
+langchain-chroma>=0.1.0
+langchain-text-splitters>=0.2.0
+chromadb>=0.5.0
+
+# Web fallback
+duckduckgo-search>=6.0.0
+scrapling>=0.2.9
+
+# Observability
+arize-phoenix>=14.0.0
+opentelemetry-sdk>=1.26.0
+opentelemetry-exporter-otlp>=1.26.0
+openinference-instrumentation-langchain>=0.1.0
+
+# Evaluation
+ragas>=0.1.0
+datasets>=2.0.0
+
+# API Server (Web UI bridge)
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+
+# UI
+streamlit>=1.37.0
+
+# Utilities
+python-dotenv>=1.0.0
+tiktoken>=0.7.0
+pypdf==4.3.1

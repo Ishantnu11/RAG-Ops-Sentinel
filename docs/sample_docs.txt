@@ -1,0 +1,128 @@
+============================================================
+DOCUMENT 1: Introduction to Retrieval-Augmented Generation
+============================================================
+Retrieval-Augmented Generation (RAG) is a technique that combines information retrieval
+with large language model generation. Instead of relying solely on the model's trained
+knowledge, RAG fetches relevant documents from an external knowledge base and uses them
+as context to produce grounded, factual answers.
+
+The core pipeline of RAG involves three stages:
+1. Indexing: Documents are chunked, embedded into vectors, and stored in a vector database.
+2. Retrieval: For a given query, the top-k most similar chunks are retrieved using
+   cosine similarity or approximate nearest-neighbor search.
+3. Generation: The retrieved chunks are passed as context to the LLM, which generates
+   a response grounded in the retrieved content.
+
+Benefits of RAG include reduced hallucination, easy knowledge updates without retraining,
+and cost-efficient deployment using smaller, local models.
+
+============================================================
+DOCUMENT 2: LangGraph and Agentic Pipelines
+============================================================
+LangGraph is a library built on top of LangChain that enables the creation of stateful,
+multi-step agentic workflows as directed graphs. Each node in the graph represents a
+function or LLM call, and edges define the conditional routing between nodes.
+
+Key concepts in LangGraph:
+- StateGraph: The main graph object that holds shared state across all nodes.
+- Nodes: Python functions that receive state and return updated state.
+- Conditional Edges: Routes that branch based on the return value of a node.
+- Compile: Converts the graph definition into an executable runnable.
+
+LangGraph is particularly useful for building self-corrective RAG pipelines where the
+system can decide to fall back to a web search if the retrieved local documents are not
+relevant to the user's query.
+
+============================================================
+DOCUMENT 3: Vector Databases and ChromaDB
+============================================================
+A vector database stores high-dimensional embedding vectors and enables efficient
+similarity search. ChromaDB is an open-source, embedded vector database that can run
+fully locally without any external services.
+
+In a RAG pipeline, ChromaDB stores document chunk embeddings. During retrieval,
+the query is embedded and compared against stored vectors using cosine similarity.
+ChromaDB supports persistent storage, meaning embeddings survive between Python sessions.
+
+ChromaDB integrates natively with LangChain via the `Chroma` class, making it easy to
+use as a drop-in vector store. It supports metadata filtering, which allows retrieval
+to be narrowed by document source, date, or any other custom field.
+
+============================================================
+DOCUMENT 4: Observability in LLM Systems
+============================================================
+Observability in LLM systems means making the internal behavior of an AI pipeline
+visible and debuggable. Without observability, it is impossible to distinguish whether
+a bad answer came from a retrieval failure, a grading error, or an LLM hallucination.
+
+Arize Phoenix is an open-source observability tool for AI/LLM pipelines. It receives
+traces exported via the OpenTelemetry (OTEL) protocol and displays them in a local
+web dashboard at http://localhost:6006.
+
+Key metrics tracked in LLM observability:
+- TTFT (Time-To-First-Token): Measures user-perceived latency from query to first output.
+- Token counts: Input and output tokens, used to estimate inference cost.
+- Node-level timings: Per-step durations (retrieval, grading, generation).
+- Trace waterfall: Visual representation of the full pipeline execution.
+
+OpenInference is the semantic convention used by Phoenix to understand LangChain traces.
+
+============================================================
+DOCUMENT 5: RAGAS — Evaluation Framework for RAG
+============================================================
+RAGAS (Retrieval Augmented Generation Assessment) is an automated evaluation framework
+designed specifically to measure the quality of RAG pipelines without requiring human
+annotations.
+
+Key RAGAS metrics:
+- Faithfulness: Measures whether the generated answer is factually consistent with
+  the retrieved context. A score of 1.0 means the answer is fully supported by context.
+  A score below 0.85 indicates hallucination risk.
+- Context Recall: Measures how much of the ground-truth answer can be attributed to
+  the retrieved context.
+- Answer Relevancy: Measures whether the generated answer actually addresses the question.
+
+RAGAS requires a golden dataset: a set of question, ground-truth answer, and context
+triplets. It uses an LLM (in our case, local Ollama) to judge each metric automatically.
+
+A faithfulness threshold of 0.85 is used as a CI gate. If the average score across the
+golden dataset drops below this threshold, the pipeline is considered degraded and
+the CI build fails.
+
+============================================================
+DOCUMENT 6: SentinelRAG Architecture and Design
+============================================================
+SentinelRAG is a production-grade Retrieval-Augmented Generation system designed for
+reliability engineering and observability. It was built as a B.Tech final year project
+at Gurugram University by Akshu Grewal, Ishantnu, and Anish Singh Rawat.
+
+The system implements three guardrails:
+Guardrail A - Observability: Every node in the LangGraph pipeline emits OpenTelemetry
+traces to Arize Phoenix. This allows engineers to see exactly where time is spent,
+how many tokens were used, and whether context was retrieved locally or from the web.
+
+Guardrail B - Self-Correction: The relevance grader uses an LLM to judge whether
+retrieved documents actually answer the user's question. If no relevant documents are
+found (grade = "no"), the system automatically falls back to a DuckDuckGo web search
+with Scrapling for content extraction.
+
+Guardrail C - QA Gate: Before any deployment, the eval_gate.py script runs RAGAS
+faithfulness evaluation over the golden dataset. If the score drops below 0.85,
+the CI/CD pipeline is blocked, preventing degraded models from reaching production.
+
+============================================================
+DOCUMENT 7: MLOps and LLMOps Concepts
+============================================================
+MLOps (Machine Learning Operations) applies DevOps principles to machine learning
+systems. For LLM-based systems, this is extended into LLMOps, which adds concerns
+specific to large language models: prompt management, hallucination monitoring,
+output evaluation, and cost tracking.
+
+Key LLMOps practices:
+- Automated regression testing using golden datasets ensures model quality over time.
+- Distributed tracing with OpenTelemetry gives per-request visibility.
+- Cost monitoring tracks token usage to prevent budget overruns.
+- Canary deployments allow testing new model versions on a small traffic slice.
+
+SentinelRAG demonstrates these practices in a local, university-scale setting using
+open-source tools: ChromaDB, Ollama, LangGraph, Arize Phoenix, and RAGAS.

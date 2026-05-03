@@ -1,0 +1,57 @@
+# GitHub Actions CI Pipeline — SentinelRAG
+# Gurugram University B.Tech Project
+# Authors: Akshu Grewal · Ishantnu · Anish Singh Rawat
+#
+# Runs on every push and pull request to main.
+# Fails the build if RAGAS faithfulness < 0.85.
+
+name: SentinelRAG CI Gate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  rag-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Ollama
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          ollama serve &
+          sleep 8
+          ollama pull llama3.2
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Ingest documents into ChromaDB
+        run: python ingest.py
+
+      - name: Run RAGAS faithfulness eval gate
+        run: python eval_gate.py
+        # Exit code 1 from eval_gate.py automatically fails this step
+        # and blocks merge/deployment — Guardrail C
+
+      - name: Upload evaluation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            chroma_db/
+            data/golden_dataset.json

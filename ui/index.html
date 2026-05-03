@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SentinelRAG — RAG Observability Dashboard</title>
+  <meta name="description" content="Production-grade RAG pipeline with observability, self-correction, and quality gates. B.Tech Project — Gurugram University 2026." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ░░░ BACKGROUND ORBS ░░░ -->
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <!-- ░░░ HEADER ░░░ -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L4 7v8c0 5.25 4.27 10.16 10 11.34C19.73 25.16 24 20.25 24 15V7L14 2z" fill="url(#shieldGrad)" />
+            <path d="M10 14l3 3 5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="shieldGrad" x1="4" y1="2" x2="24" y2="26" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#818cf8"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">SentinelRAG</span>
+          <span class="brand-tag">RAG Observability Pipeline</span>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="pipeline-badge">
+          <span class="step active" id="step-retrieve">Retrieve</span>
+          <div class="step-arrow">→</div>
+          <span class="step" id="step-grade">Grade</span>
+          <div class="step-arrow">→</div>
+          <span class="step" id="step-generate">Generate</span>
+          <div class="step-arrow">→</div>
+          <span class="step" id="step-measure">Measure</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="university-badge">
+          <div class="uni-dot"></div>
+          <div>
+            <div class="uni-name">Gurugram University</div>
+            <div class="uni-sub">B.Tech CSE (AI) · 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ░░░ MAIN LAYOUT ░░░ -->
+  <main class="main-grid">
+
+    <!-- ── LEFT COLUMN ── -->
+    <div class="col-left">
+
+      <!-- ── STATUS BAR ── -->
+      <section class="card status-card">
+        <div class="card-header">
+          <h2 class="card-title">System Status</h2>
+          <button class="btn-icon" id="btn-refresh-status" title="Refresh status">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.37L23 10"/><path d="M20.49 15a9 9 0 01-14.85 3.37L1 14"/></svg>
+          </button>
+        </div>
+        <div class="status-grid">
+          <div class="status-item" id="status-ollama">
+            <div class="status-dot dot-checking"></div>
+            <div class="status-info">
+              <span class="status-label">Ollama</span>
+              <span class="status-value" id="status-ollama-val">Checking…</span>
+            </div>
+          </div>
+          <div class="status-item" id="status-chroma">
+            <div class="status-dot dot-checking"></div>
+            <div class="status-info">
+              <span class="status-label">ChromaDB</span>
+              <span class="status-value" id="status-chroma-val">Checking…</span>
+            </div>
+          </div>
+          <div class="status-item" id="status-phoenix">
+            <div class="status-dot dot-checking"></div>
+            <div class="status-info">
+              <span class="status-label">Phoenix</span>
+              <span class="status-value" id="status-phoenix-val">Checking…</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── QUERY PANEL ── -->
+      <section class="card query-card">
+        <div class="card-header">
+          <h2 class="card-title">Ask the RAG Pipeline</h2>
+          <div class="model-badge">llama3.2 · local</div>
+        </div>
+        <div class="query-input-wrap">
+          <textarea
+            id="query-input"
+            class="query-input"
+            placeholder="e.g. What is Retrieval-Augmented Generation?"
+            rows="3"
+            maxlength="1000"
+          ></textarea>
+          <div class="query-footer">
+            <span class="char-count"><span id="char-count">0</span>/1000</span>
+            <button class="btn-primary" id="btn-ask">
+              <span class="btn-label">Ask SentinelRAG</span>
+              <svg class="btn-icon-right" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick questions -->
+        <div class="quick-questions">
+          <span class="quick-label">Try:</span>
+          <button class="quick-btn" data-q="What is Retrieval-Augmented Generation?">What is RAG?</button>
+          <button class="quick-btn" data-q="What are the three stages of a RAG pipeline?">RAG stages?</button>
+          <button class="quick-btn" data-q="What is ChromaDB used for in a RAG pipeline?">ChromaDB?</button>
+          <button class="quick-btn" data-q="What does LangGraph enable in a RAG system?">LangGraph?</button>
+          <button class="quick-btn" data-q="What is the faithfulness threshold used in SentinelRAG?">RAGAS threshold?</button>
+        </div>
+      </section>
+
+      <!-- ── ANSWER PANEL ── -->
+      <section class="card answer-card" id="answer-card">
+        <div class="card-header">
+          <h2 class="card-title">Answer</h2>
+          <div class="answer-badges" id="answer-badges"></div>
+        </div>
+        <div class="answer-body" id="answer-body">
+          <div class="answer-placeholder">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <p>Submit a question to see the RAG pipeline in action.</p>
+          </div>
+        </div>
+        <!-- Skeleton loader -->
+        <div class="skeleton-wrap" id="skeleton-wrap" style="display:none;">
+          <div class="skeleton skeleton-line w-90"></div>
+          <div class="skeleton skeleton-line w-75"></div>
+          <div class="skeleton skeleton-line w-85"></div>
+          <div class="skeleton skeleton-line w-60"></div>
+          <div class="skeleton skeleton-line w-80"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ── RIGHT COLUMN ── -->
+    <div class="col-right">
+
+      <!-- ── PIPELINE VISUALIZER ── -->
+      <section class="card pipeline-card">
+        <div class="card-header">
+          <h2 class="card-title">Pipeline Visualizer</h2>
+          <span class="card-sub" id="pipeline-status-text">Waiting for query…</span>
+        </div>
+        <div class="pipeline-viz">
+          <div class="pv-node" id="pv-retrieve">
+            <div class="pv-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div class="pv-label">Retrieve</div>
+            <div class="pv-sub" id="pv-retrieve-sub">ChromaDB k=3</div>
+            <div class="pv-badge" id="pv-retrieve-badge"></div>
+          </div>
+          <div class="pv-arrow" id="pv-arrow-1">→</div>
+          <div class="pv-node" id="pv-grade">
+            <div class="pv-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="pv-label">Grade</div>
+            <div class="pv-sub" id="pv-grade-sub">LLM relevance</div>
+            <div class="pv-badge" id="pv-grade-badge"></div>
+          </div>
+          <div class="pv-fork">
+            <div class="pv-fork-path fork-yes" id="pv-fork-yes">
+              <span class="fork-label">YES</span>
+              <div class="pv-arrow">↓</div>
+              <div class="pv-node pv-node-sm" id="pv-generate">
+                <div class="pv-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <div class="pv-label">Generate</div>
+                <div class="pv-sub">Local context</div>
+              </div>
+            </div>
+            <div class="pv-fork-path fork-no" id="pv-fork-no">
+              <span class="fork-label">NO</span>
+              <div class="pv-arrow">↓</div>
+              <div class="pv-node pv-node-sm" id="pv-web">
+                <div class="pv-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                </div>
+                <div class="pv-label">Web Search</div>
+                <div class="pv-sub">DuckDuckGo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── METRICS GRID ── -->
+      <section class="card metrics-card">
+        <div class="card-header">
+          <h2 class="card-title">Performance Metrics</h2>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-tile" id="metric-ttft">
+            <div class="metric-icon ttft-icon">⚡</div>
+            <div class="metric-value" id="val-ttft">—</div>
+            <div class="metric-label">TTFT</div>
+            <div class="metric-sub">Time-to-first-token</div>
+          </div>
+          <div class="metric-tile" id="metric-tokens-in">
+            <div class="metric-icon in-icon">📥</div>
+            <div class="metric-value" id="val-tokens-in">—</div>
+            <div class="metric-label">Input Tokens</div>
+            <div class="metric-sub">Prompt length</div>
+          </div>
+          <div class="metric-tile" id="metric-tokens-out">
+            <div class="metric-icon out-icon">📤</div>
+            <div class="metric-value" id="val-tokens-out">—</div>
+            <div class="metric-label">Output Tokens</div>
+            <div class="metric-sub">Response length</div>
+          </div>
+          <div class="metric-tile" id="metric-cost">
+            <div class="metric-icon cost-icon">💰</div>
+            <div class="metric-value" id="val-cost">—</div>
+            <div class="metric-label">Est. Cost</div>
+            <div class="metric-sub">USD equivalent</div>
+          </div>
+          <div class="metric-tile" id="metric-route">
+            <div class="metric-icon route-icon">🔀</div>
+            <div class="metric-value" id="val-route">—</div>
+            <div class="metric-label">Route</div>
+            <div class="metric-sub">Local / Web</div>
+          </div>
+          <div class="metric-tile" id="metric-grade">
+            <div class="metric-icon grade-icon">🎯</div>
+            <div class="metric-value" id="val-grade">—</div>
+            <div class="metric-label">Grade</div>
+            <div class="metric-sub">Relevance</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── EVAL PANEL ── -->
+      <section class="card eval-card">
+        <div class="card-header">
+          <h2 class="card-title">RAGAS Evaluation Gate</h2>
+          <span class="card-sub">Guardrail C — CI/CD Quality Gate</span>
+        </div>
+        <div class="eval-body">
+          <div class="eval-info">
+            <p>Runs faithfulness evaluation over 8 golden Q&A pairs using the local Ollama LLM as judge. Threshold: <strong>0.85</strong>.</p>
+          </div>
+          <div class="eval-gauge-wrap">
+            <div class="eval-gauge" id="eval-gauge">
+              <svg viewBox="0 0 200 110" class="gauge-svg">
+                <defs>
+                  <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ef4444"/>
+                    <stop offset="57%" stop-color="#f59e0b"/>
+                    <stop offset="85%" stop-color="#22c55e"/>
+                    <stop offset="100%" stop-color="#06b6d4"/>
+                  </linearGradient>
+                </defs>
+                <!-- Track -->
+                <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#1e2a3a" stroke-width="16" stroke-linecap="round"/>
+                <!-- Fill -->
+                <path id="gauge-fill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="16" stroke-linecap="round" stroke-dasharray="0 251.2"/>
+                <!-- Threshold marker at 0.85 -->
+                <line id="gauge-threshold" x1="152" y1="47" x2="160" y2="39" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,2"/>
+                <text x="163" y="37" fill="#f59e0b" font-size="9" font-family="Inter">0.85</text>
+                <!-- Score text -->
+                <text id="gauge-score-text" x="100" y="88" text-anchor="middle" fill="#e2e8f0" font-size="28" font-family="Space Grotesk" font-weight="600">—</text>
+                <text x="100" y="104" text-anchor="middle" fill="#64748b" font-size="10" font-family="Inter">Faithfulness</text>
+              </svg>
+            </div>
+          </div>
+          <div class="eval-result" id="eval-result"></div>
+          <button class="btn-eval" id="btn-eval">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Run Evaluation Gate
+          </button>
+          <div class="eval-warning">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            This takes ~3–10 minutes (Ollama judges 8 questions)
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ░░░ EXECUTION LOG DRAWER ░░░ -->
+  <div class="log-drawer" id="log-drawer">
+    <div class="log-handle" id="log-handle">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+      <span id="log-handle-label">Execution Log</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+    </div>
+    <div class="log-content" id="log-content">
+      <div class="log-empty">No queries run yet. Submit a question above.</div>
+    </div>
+  </div>
+
+  <!-- ░░░ FOOTER ░░░ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-team">
+        <span class="footer-dot"></span>
+        <span>Akshu Grewal</span>
+        <span class="footer-sep">·</span>
+        <span>Ishantnu</span>
+        <span class="footer-sep">·</span>
+        <span>Anish Singh Rawat</span>
+      </div>
+      <div class="footer-center">
+        <span class="footer-stack">LangGraph · ChromaDB · Arize Phoenix · RAGAS · Ollama</span>
+      </div>
+      <div class="footer-right">
+        <a href="http://localhost:6006" target="_blank" class="footer-link">Phoenix Dashboard ↗</a>
+        <a href="http://localhost:8000/docs" target="_blank" class="footer-link">API Docs ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ░░░ INGEST TOAST ░░░ -->
+  <div class="toast" id="ingest-toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-msg">Documents ingested successfully!</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

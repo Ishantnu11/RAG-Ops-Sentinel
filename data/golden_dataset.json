@@ -1,0 +1,350 @@
+[
+  {
+    "question": "What is Retrieval-Augmented Generation?",
+    "ground_truth": "RAG is a technique that combines information retrieval with LLM generation to produce grounded, factual answers using an external knowledge base.",
+    "reference_contexts": [
+      "Retrieval-Augmented Generation (RAG) is a technique that combines information retrieval with large language model generation. Instead of relying solely on the model's trained knowledge, RAG fetches relevant documents from an external knowledge base and uses them as context to produce grounded, factual answers."
+    ]
+  },
+  {
+    "question": "What are the three stages of a RAG pipeline?",
+    "ground_truth": "The three stages are Indexing (chunking and embedding documents), Retrieval (fetching top-k similar chunks), and Generation (producing an LLM answer grounded in context).",
+    "reference_contexts": [
+      "The core pipeline of RAG involves three stages: 1. Indexing: Documents are chunked, embedded into vectors, and stored in a vector database. 2. Retrieval: For a given query, the top-k most similar chunks are retrieved using cosine similarity or approximate nearest-neighbor search. 3. Generation: The retrieved chunks are passed as context to the LLM, which generates a response grounded in the retrieved content."
+    ]
+  },
+  {
+    "question": "What is TTFT and why does it matter?",
+    "ground_truth": "TTFT stands for Time-To-First-Token. It measures user-perceived latency from query to first output, making latency bottlenecks visible in LLM systems.",
+    "reference_contexts": [
+      "TTFT (Time-To-First-Token): Measures user-perceived latency from query to first output. Without metrics like TTFT, latency bottlenecks remain invisible."
+    ]
+  },
+  {
+    "question": "What is the faithfulness threshold used in SentinelRAG?",
+    "ground_truth": "SentinelRAG uses a RAGAS faithfulness threshold of 0.85. If the score drops below this, the CI gate fails the build.",
+    "reference_contexts": [
+      "A faithfulness threshold of 0.85 is used as a CI gate. If the average score across the golden dataset drops below this threshold, the pipeline is considered degraded and the CI build fails."
+    ]
+  },
+  {
+    "question": "What is ChromaDB used for in a RAG pipeline?",
+    "ground_truth": "ChromaDB is an open-source embedded vector database that stores document chunk embeddings and enables efficient cosine similarity search during retrieval.",
+    "reference_contexts": [
+      "A vector database stores high-dimensional embedding vectors and enables efficient similarity search. ChromaDB is an open-source, embedded vector database that can run fully locally without any external services. In a RAG pipeline, ChromaDB stores document chunk embeddings."
+    ]
+  },
+  {
+    "question": "What does LangGraph enable in a RAG system?",
+    "ground_truth": "LangGraph enables stateful, multi-step agentic workflows as directed graphs, including conditional routing like falling back to web search when local retrieval is insufficient.",
+    "reference_contexts": [
+      "LangGraph is a library built on top of LangChain that enables the creation of stateful, multi-step agentic workflows as directed graphs. LangGraph is particularly useful for building self-corrective RAG pipelines where the system can decide to fall back to a web search if the retrieved local documents are not relevant to the user's query."
+    ]
+  },
+  {
+    "question": "What are the three guardrails in SentinelRAG?",
+    "ground_truth": "The three guardrails are: A) Observability via Arize Phoenix and OpenTelemetry, B) Self-Correction via LangGraph conditional routing to web fallback, and C) QA Gate via RAGAS faithfulness evaluation blocking CI/CD if score < 0.85.",
+    "reference_contexts": [
+      "Guardrail A - Observability: Every node in the LangGraph pipeline emits OpenTelemetry traces to Arize Phoenix. Guardrail B - Self-Correction: The relevance grader uses an LLM to judge whether retrieved documents actually answer the user's question. Guardrail C - QA Gate: Before any deployment, the eval_gate.py script runs RAGAS faithfulness evaluation over the golden dataset."
+    ]
+  },
+  {
+    "question": "What is Arize Phoenix used for?",
+    "ground_truth": "Arize Phoenix is an open-source observability tool for AI/LLM pipelines that receives traces via OpenTelemetry and displays them in a local web dashboard at http://localhost:6006.",
+    "reference_contexts": [
+      "Arize Phoenix is an open-source observability tool for AI/LLM pipelines. It receives traces exported via the OpenTelemetry (OTEL) protocol and displays them in a local web dashboard at http://localhost:6006."
+    ]
+  },
+  {
+    "question": "What are the core subjects in Semester III of the Gurugram University B.Tech CSE (AI) syllabus?",
+    "ground_truth": "The core subjects include Discrete Mathematics, Aptitude Reasoning - I, Digital Electronics, R Programming, Operating System, and Database Management System.",
+    "reference_contexts": [
+      "Scheme of Studies/Examination w.e.f. 2023 -24 Semester - III ... 1. BSC Discrete Mathematics ... 2. BSC Aptitude Reasoning - I ... 3. ESC Digital Electronics ... 4. PCC R Programming ... 5. PCC Operating System ... 6. PCC Database Management System"
+    ]
+  },
+  {
+    "question": "How many credits is the Database Management System course in Semester III?",
+    "ground_truth": "It is a 3-credit course.",
+    "reference_contexts": [
+      "6. PCC Database Management System 3 0 0 3 3 30 70 - 100 2"
+    ]
+  },
+  {
+    "question": "What is the total marks for Semester III?",
+    "ground_truth": "The total marks for Semester III is 1000.",
+    "reference_contexts": [
+      "Total 18 0 8 26 22 310 490 200 1000"
+    ]
+  },
+  {
+    "question": "What are the requirements for Semester VIII in the B.Tech CSE (AI) program?",
+    "ground_truth": "Students must complete MOOC-1 (Essential), MOOC-2 (Essential), and a Project-III or Industrial Project.",
+    "reference_contexts": [
+      "Semester - VIII ... 1. ESC MOOC -1 (Essential) ... 2. ESC MOOC -2 (Essential) ... 3. PROJ Project – III / Industrial Project"
+    ]
+  },
+  {
+    "question": "How many credits is the Project-III/Industrial Project in Semester VIII?",
+    "ground_truth": "It is an 8-credit course.",
+    "reference_contexts": [
+      "3. PROJ Project – III / Industrial Project 0 0 16 16 8 150 150 300 3"
+    ]
+  },
+  {
+    "question": "What is the duration of the Project-III exam in Semester VIII?",
+    "ground_truth": "The duration of the exam is 3 hours.",
+    "reference_contexts": [
+      "3. PROJ Project – III / Industrial Project ... Duration of Exam (Hours) 3"
+    ]
+  },
+  {
+    "question": "What is the vision of Gurugram University?",
+    "ground_truth": "Gurugram University aspires to be a front runner in global education, a role model for institutional excellence, and to nurture socially and morally responsible disciples through a learner-centric approach.",
+    "reference_contexts": [
+      "Vision Gurugram University aspires to be a front runner in global education; role model for institutional excellence, trans -cultural quality learning, intellectual growth, contemporary research, capacity building and nurturing socially and morally responsible disciples through a learner- centric approach."
+    ]
+  },
+  {
+    "question": "What is one of the missions of Gurugram University regarding international alliances?",
+    "ground_truth": "One mission is to move up through international alliances and collaborative initiatives to achieve global excellence.",
+    "reference_contexts": [
+      "Mission 2. To move up through international alliances and collaborative initiatives to achieve global excellence."
+    ]
+  },
+  {
+    "question": "What does the PCC category stand for in the syllabus?",
+    "ground_truth": "PCC stands for Professional Core Course.",
+    "reference_contexts": [
+      "PCC - Professional Core Course"
+    ]
+  },
+  {
+    "question": "Which subject in Semester III is categorized as an ESC (Engineering Science Course)?",
+    "ground_truth": "Digital Electronics is categorized as an ESC.",
+    "reference_contexts": [
+      "3. ESC Digital Electronics 3 0 0 3 3 30 70 - 100 3"
+    ]
+  },
+  {
+    "question": "Is Discrete Mathematics a BSC or ESC course in Semester III?",
+    "ground_truth": "Discrete Mathematics is a BSC (Basic Science Course).",
+    "reference_contexts": [
+      "1. BSC Discrete Mathematics 3 0 0 3 3 30 70 - 100 3"
+    ]
+  },
+  {
+    "question": "How many contact hours per week are assigned to the Operating System Lab in Semester III?",
+    "ground_truth": "There are 2 contact hours per week for the Operating System Lab.",
+    "reference_contexts": [
+      "9. LC Operating System Lab 0 0 2 2 1 50 - 50 100 2"
+    ]
+  },
+  {
+    "question": "What is the credit value for R Programming in Semester III?",
+    "ground_truth": "R Programming is a 3-credit course.",
+    "reference_contexts": [
+      "4. PCC R Programming 3 0 0 3 3 30 70 - 100 3"
+    ]
+  },
+  {
+    "question": "What is the total contact hours per week for all courses in Semester III?",
+    "ground_truth": "The total contact hours per week is 26.",
+    "reference_contexts": [
+      "Total 18 0 8 26 22 310 490 200 1000"
+    ]
+  },
+  {
+    "question": "What is the evaluation breakdown for Project-III in Semester VIII?",
+    "ground_truth": "The breakdown is 150 marks for classwork and 150 marks for practical, totaling 300 marks.",
+    "reference_contexts": [
+      "3. PROJ Project – III / Industrial Project ... Marks of classwork 150 Theory - Practical 150 Total 300"
+    ]
+  },
+  {
+    "question": "What must a student submit at the end of the 8th semester besides the project?",
+    "ground_truth": "Each student has to submit the certificate of MOOCs (Essential).",
+    "reference_contexts": [
+      "NOTE: At the end of the 8th semester, each student has to submit the certificate of MOOCs (Essential)."
+    ]
+  },
+  {
+    "question": "What is the category for Database Management System in Semester III?",
+    "ground_truth": "It is categorized as a PCC (Professional Core Course).",
+    "reference_contexts": [
+      "6. PCC Database Management System 3 0 0 3 3 30 70 - 100 2"
+    ]
+  },
+  {
+    "question": "What is the primary difference between HydraDB's 'Knowledge Graph' mode and standard vector retrieval?",
+    "ground_truth": "HydraDB allows for relationship-aware querying where nodes (entities) and edges (relationships) are traversed, whereas standard vector retrieval relies solely on the semantic distance between independent document chunks.",
+    "reference_contexts": [
+      "HydraDB provides a hybrid approach to data. While it supports vector embeddings for semantic search, its core strength lies in its ability to map data as a knowledge graph. This enables users to perform complex traversals across related data points, which standard vector databases cannot do without high compute overhead."
+    ]
+  },
+  {
+    "question": "In the context of the Gurugram University syllabus, what is the prerequisite for 'Mobile App Development' in Semester VI?",
+    "ground_truth": "The prerequisite is a strong foundation in Database Management Systems (Semester III) and Java/Object-Oriented Programming principles.",
+    "reference_contexts": [
+      "Semester VI - Mobile App Development (PCC): This course builds upon the architectural concepts introduced in DBMS and requires proficiency in OOP (Object Oriented Programming) to manage application state and local storage."
+    ]
+  },
+  {
+    "question": "How does 'Soft Computing' differ from 'Hard Computing' in terms of precision and tolerance?",
+    "ground_truth": "Soft computing emphasizes tolerance for imprecision, uncertainty, and partial truth to achieve tractability and robustness, whereas hard computing requires a precise analytical model and binary logic.",
+    "reference_contexts": [
+      "Soft Computing (PCC) focuses on approximate reasoning. Unlike hard computing, which follows strict $P=NP$ logic and absolute precision, soft computing utilizes fuzzy logic, neural networks, and evolutionary algorithms to solve real-world problems where data is often noisy."
+    ]
+  },
+  {
+    "question": "What is the purpose of the 'eval_gate.py' script in the SentinelRAG CI/CD pipeline?",
+    "ground_truth": "The script runs a RAGAS faithfulness evaluation against a 'golden dataset' and acts as a blocking gate; if the score is below 0.85, it prevents the deployment of the model to production.",
+    "reference_contexts": [
+      "Guardrail C - QA Gate: Before any deployment, the eval_gate.py script runs RAGAS faithfulness evaluation over the golden dataset. This ensures that any change in the chunking strategy or LLM temperature doesn't degrade the groundedness of the answers."
+    ]
+  },
+  {
+    "question": "Define 'Tokenization' in the context of NLP and its role in an LLM pipeline.",
+    "ground_truth": "Tokenization is the process of breaking down raw text into smaller units (tokens), such as words or sub-words, which are then converted into numerical IDs for processing by the model.",
+    "reference_contexts": [
+      "Natural Language Processing (NLP): Tokenization is the first step in any text processing pipeline. Modern LLMs often use Byte Pair Encoding (BPE) or WordPiece to handle out-of-vocabulary words by breaking them into smaller, frequent sub-units."
+    ]
+  },
+  {
+    "question": "What are the three components of a Fuzzy Logic System?",
+    "ground_truth": "The three core components are Fuzzification (converting crisp inputs to fuzzy sets), an Inference Engine (applying rules), and Defuzzification (converting fuzzy results back to crisp values).",
+    "reference_contexts": [
+      "Soft Computing Unit 2: Fuzzy Logic Systems consist of three main stages: 1. Fuzzification 2. Rule Base/Inference Engine 3. Defuzzification. This allows systems to handle linguistic variables like 'warm' or 'fast' instead of just fixed integers."
+    ]
+  },
+  {
+    "question": "What is the significance of 'OpenTelemetry' (OTEL) in SentinelRAG's observability?",
+    "ground_truth": "OTEL provides a standardized protocol for collecting and exporting traces from every node in the LangGraph pipeline, allowing them to be visualized in Arize Phoenix for debugging.",
+    "reference_contexts": [
+      "Guardrail A - Observability: Every node in the LangGraph pipeline emits OpenTelemetry traces. By using the OTEL protocol, we ensure that the system's internal decisions—like whether to use a local tool or call an API—are logged and viewable in the dashboard at port 6006."
+    ]
+  },
+  {
+    "question": "How many credits is the 'Soft Computing' course in Semester VI?",
+    "ground_truth": "It is a 3-credit course.",
+    "reference_contexts": [
+      "Scheme of Examination Semester VI: ... 5. PCC Soft Computing 3 0 0 3 3 30 70 - 100 3."
+    ]
+  },
+  {
+    "question": "In Big Data Analysis, what is the role of the 'Map' function in the MapReduce framework?",
+    "ground_truth": "The Map function takes input data and transforms it into a set of intermediate key-value pairs.",
+    "reference_contexts": [
+      "Big Data Analysis: The MapReduce programming model consists of two main functions. The 'Map' function processes raw data to create key-value pairs, which are then sorted and passed to the 'Reduce' function for final aggregation."
+    ]
+  },
+  {
+    "question": "What is the 'Cold Start' problem in RAG systems and how does web-fallback help?",
+    "ground_truth": "The cold start problem occurs when the local vector database lacks information on very recent or niche events; web-fallback solves this by routing queries to a search engine when local retrieval yields low relevance scores.",
+    "reference_contexts": [
+      "SentinelRAG Architecture: To prevent 'I don't know' responses for real-time events, the system utilizes LangGraph conditional routing. If the local ChromaDB doesn't contain relevant context (a 'cold start' for that topic), the relevance grader triggers a web search."
+    ]
+  },
+  {
+    "question": "Explain the concept of 'Groundedness' in RAGAS evaluation.",
+    "ground_truth": "Groundedness (or Faithfulness) measures whether the claims made in an LLM's response are explicitly supported by the retrieved context provided in the prompt.",
+    "reference_contexts": [
+      "RAGAS Metrics: Faithfulness/Groundedness is calculated by dividing the number of claims that can be inferred from the context by the total number of claims made in the generated answer. A score of 1.0 means every word is backed by the source."
+    ]
+  },
+  {
+    "question": "What subject is categorized under PROJ in Semester VIII of the B.Tech CSE (AI) program?",
+    "ground_truth": "Project – III / Industrial Project is the course categorized under PROJ.",
+    "reference_contexts": [
+      "Semester - VIII ... 3. PROJ Project – III / Industrial Project 0 0 16 16 8 150 150 300 3."
+    ]
+  },
+  {
+    "question": "What does a 'Self-Corrective RAG' pipeline do when it detects a hallucination?",
+    "ground_truth": "It re-executes the retrieval step with a refined query or loops back to the generation step with additional instructions to strictly follow the provided context.",
+    "reference_contexts": [
+      "LangGraph enables self-corrective RAG. If the 'Hallucination Grader' node detects that the output is not supported by the documents, it can loop back to the 'Retrieval' node to fetch different $k$ chunks or re-write the user query for better results."
+    ]
+  },
+  {
+    "question": "What is the total internal marks (Classwork) for the 'Operating System Lab' in Semester III?",
+    "ground_truth": "The total internal marks for the Operating System Lab is 50.",
+    "reference_contexts": [
+      "9. LC Operating System Lab 0 0 2 2 1 50 - 50 100 2. Here, 50 represents the classwork/internal assessment marks."
+    ]
+  },
+  {
+    "question": "In HydraDB, how do you handle high-cardinality metadata filtering during retrieval?",
+    "ground_truth": "HydraDB uses optimized indexing for metadata fields, allowing users to apply 'WHERE' clause filters alongside vector similarity searches without significant latency increases.",
+    "reference_contexts": [
+      "HydraDB Performance: For hackathon participants, note that HydraDB allows for pre-filtering. You can restrict your vector search to specific document IDs or timestamps using its metadata indexing engine to ensure your LLM only sees relevant subsets."
+    ]
+  },
+  {
+    "question": "What is the 'Time-To-First-Token' (TTFT) goal for a production-grade RAG system?",
+    "ground_truth": "While it varies, a common goal is to keep TTFT under 200-500ms to ensure the user perceives the system as responsive.",
+    "reference_contexts": [
+      "Performance Metrics: TTFT measures the time from the 'Enter' key press to the first visible character on the screen. Optimizing retrieval speed and using streaming LLM responses are key to minimizing this metric."
+    ]
+  },
+  {
+    "question": "Which course in Semester III involves 'Aptitude Reasoning - I'?",
+    "ground_truth": "The course is categorized as BSC Aptitude Reasoning - I.",
+    "reference_contexts": [
+      "2. BSC Aptitude Reasoning - I 2 0 0 2 2 20 30 - 50 2."
+    ]
+  },
+  {
+    "question": "What is the 'Mission 1' of Gurugram University?",
+    "ground_truth": "To impart quality education by using modern infrastructure and a learner-centric teaching methodology.",
+    "reference_contexts": [
+      "Mission 1. To impart quality education by using modern infrastructure and learner - centric teaching methodology."
+    ]
+  },
+  {
+    "question": "How does 'Directed Acyclic Graph' (DAG) architecture benefit LangGraph workflows?",
+    "ground_truth": "It allows for a clear, non-looping flow of data from retrieval to generation, though LangGraph specifically allows cycles to create 'loops' for self-correction.",
+    "reference_contexts": [
+      "LangGraph Architecture: While standard chains are linear, LangGraph treats the RAG process as a graph. This allows for state management where the 'state' (the query + retrieved docs) is passed between nodes, allowing for complex decision-making logic."
+    ]
+  },
+  {
+    "question": "What is observability in LLM systems?",
+    "ground_truth": "Observability involves tracking the internal state, traces, and performance metrics of an LLM application. It allows developers to monitor costs, debug reasoning steps, and evaluate the quality of the RAG pipeline in real-time.",
+    "tools": [
+      "LangSmith",
+      "Weights & Biases",
+      "Arize Phoenix"
+    ],
+    "reference_contexts": []
+  },
+  {
+    "topic": "NumPy Vectorization",
+    "question": "What is vectorization in NumPy and why is it preferred over loops?",
+    "ground_truth": "Vectorization is the process of performing element-wise operations on entire arrays at once using highly optimized C and Fortran routines. It is preferred over Python loops because it eliminates the overhead of Python's dynamic typing and results in significantly faster execution for large datasets.",
+    "reference_contexts": []
+  },
+  {
+    "topic": "Pandas Data Structures",
+    "question": "What is the difference between a Pandas Series and a DataFrame?",
+    "ground_truth": "A Series is a one-dimensional labeled array capable of holding any data type, similar to a column in a spreadsheet. A DataFrame is a two-dimensional, size-mutable, potentially heterogeneous tabular data structure with labeled axes (rows and columns), similar to an entire spreadsheet or SQL table.",
+    "reference_contexts": []
+  },
+  {
+    "topic": "Machine Learning Workflow",
+    "question": "Explain the difference between 'fit', 'transform', and 'predict' in Scikit-learn.",
+    "ground_truth": "'fit' calculates the parameters (e.g., mean and std) from the training data. 'transform' applies those parameters to the data to scale or modify it. 'predict' uses a trained model to generate labels or values for new, unseen data.",
+    "reference_contexts": []
+  },
+  {
+    "topic": "Data Preprocessing",
+    "question": "When should you use StandardScaler versus MinMaxScaler?",
+    "ground_truth": "StandardScaler (Z-score normalization) is best when the data follows a Gaussian distribution or when you want to handle outliers more robustly. MinMaxScaler (Normalization) is best when you need data within a specific range (e.g., 0 to 1) and your data does not have significant outliers that would squash the majority of values.",
+    "reference_contexts": []
+  },
+  {
+    "topic": "Data Visualization",
+    "question": "What is the primary advantage of Seaborn over Matplotlib?",
+    "ground_truth": "Seaborn is built on top of Matplotlib and provides a high-level interface for drawing attractive and informative statistical graphics. It simplifies complex tasks like creating heatmaps, violin plots, and multi-plot grids, and it integrates directly with Pandas DataFrames.",
+    "reference_contexts": []
+  }
+]
