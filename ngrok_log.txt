@@ -1,0 +1,14 @@
+t=2026-05-03T22:46:04+0530 lvl=info msg="no configuration paths supplied"
+t=2026-05-03T22:46:04+0530 lvl=info msg="using configuration at default config path" path=C:\\Users\\HP\\AppData\\Local\\ngrok\\ngrok.yml
+t=2026-05-03T22:46:04+0530 lvl=info msg="open config file" path=C:\\Users\\HP\\AppData\\Local\\ngrok\\ngrok.yml err=nil
+t=2026-05-03T22:46:04+0530 lvl=info msg="FIPS 140 mode" enabled=false
+t=2026-05-03T22:46:04+0530 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+t=2026-05-03T22:46:05+0530 lvl=info msg="client session established" obj=tunnels.session
+t=2026-05-03T22:46:05+0530 lvl=info msg="tunnel session started" obj=tunnels.session
+t=2026-05-03T22:46:05+0530 lvl=info msg="started tunnel" obj=tunnels name=command_line addr=http://localhost:11434 url=https://ointment-unstamped-sphinx.ngrok-free.dev
+t=2026-05-03T22:51:08+0530 lvl=info msg="join connections" obj=join id=e28bbaa4b313 l=127.0.0.1:11434 r=34.127.0.121:43456
+t=2026-05-03T22:51:27+0530 lvl=info msg="join connections" obj=join id=da06898fb919 l=127.0.0.1:11434 r=103.240.195.119:1937
+t=2026-05-03T22:51:50+0530 lvl=info msg="join connections" obj=join id=67d69a331676 l=127.0.0.1:11434 r=34.127.0.121:43456
+t=2026-05-03T22:52:58+0530 lvl=info msg="received stop request" obj=app stopReq="{err:<nil> restart:false}"
+t=2026-05-03T22:52:58+0530 lvl=info msg="session closing" obj=tunnels.session err=nil
+t=2026-05-03T22:52:58+0530 lvl=info msg="accept failed" obj=tunnels.session obj=csess id=bdbb833a9b2a err="reconnecting session closed"
